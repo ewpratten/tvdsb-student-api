@@ -1,18 +1,23 @@
-import requests
 import re
+
+import requests
+
 
 # Invalid auth exception
 class InvalidAuth(Exception):
     pass
 
+
 class LoginCreds:
-    def __init__(self, username:str, password: str):
+    def __init__(self, username: str, password: str):
         self.username = username
         self.password = password
+
 
 # Auth information
 class Student:
     """Student Information"""
+
     _first_name: str = ""
     _has_school_today: bool = False
     _last_login_time: str = ""
@@ -52,19 +57,26 @@ class Student:
         return self._student_number
 
     def __str__(self):
-        return str({
-            "first_name": self.getFirstName(),
-            "has_school_today": self.hasSchoolToday(),
-            "last_login_time": self.getLastLoginTime(),
-            "student_number": self.getStudentNumber()
-        })
+        return str(
+            {
+                "first_name": self.getFirstName(),
+                "has_school_today": self.hasSchoolToday(),
+                "last_login_time": self.getLastLoginTime(),
+                "student_number": self.getStudentNumber(),
+            }
+        )
+
 
 def _webpageToAuthInfo(data: str) -> Student:
     # Output
     out = Student()
 
     # Pase Login info
-    lgnInfo = re.findall(r'Good Morning, (.*)\.&nbsp;&nbsp;Today is .*, (.*).<br>\(Last Login Time (.*)\)', data, re.M)
+    lgnInfo = re.findall(
+        r"Good Morning, (.*)\.&nbsp;&nbsp;Today is .*, (.*).<br>\(Last Login Time (.*)\)",
+        data,
+        re.M,
+    )
     if len(lgnInfo) == 1:
         out._first_name = lgnInfo[0][0]
         out._has_school_today = lgnInfo[0][1] != "a day off of school"
@@ -77,6 +89,7 @@ def _webpageToAuthInfo(data: str) -> Student:
 
     return out
 
+
 # Login
 def getStudent(creds: LoginCreds) -> Student:
     session = requests.Session()
@@ -85,15 +98,17 @@ def getStudent(creds: LoginCreds) -> Student:
     data = session.get("https://schoolapps2.tvdsb.ca/students/student_login/lgn.aspx")
 
     # Read all secrets
-    secrets = re.findall(r'input type="hidden" name="(.*)" id=".*" value="(.*)"', data.text, re.M)
-    
+    secrets = re.findall(
+        r'input type="hidden" name="(.*)" id=".*" value="(.*)"', data.text, re.M
+    )
+
     # Build HTTP request
     request_body = {
         "txtUserID": creds.username,
         "txtPwd": creds.password,
         "__EVENTTARGET": "",
         "__EVENTARGUMENT": "",
-        "btnSubmit":"Login"
+        "btnSubmit": "Login",
     }
 
     # Add all secrets
@@ -101,7 +116,10 @@ def getStudent(creds: LoginCreds) -> Student:
         request_body[secret[0]] = secret[1]
 
     # Make request to schoolapps2 server
-    data = session.post("https://schoolapps2.tvdsb.ca/students/student_login/lgn.aspx", data=request_body)
+    data = session.post(
+        "https://schoolapps2.tvdsb.ca/students/student_login/lgn.aspx",
+        data=request_body,
+    )
 
     # Handle invalid auth
     # We just search for a word that only exists in the authenticated parts of the site
@@ -116,4 +134,3 @@ def getStudent(creds: LoginCreds) -> Student:
 
     # Return auth info
     return studentInfo
-    

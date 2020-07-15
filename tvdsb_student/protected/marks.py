@@ -1,7 +1,10 @@
-import requests
 import re
-from ..auth import Student, LoginCreds, getStudent
 from typing import List
+
+import requests
+
+from ..auth import LoginCreds, Student, getStudent
+
 
 def getMarkHistory(creds: LoginCreds) -> List[dict]:
 
@@ -9,10 +12,16 @@ def getMarkHistory(creds: LoginCreds) -> List[dict]:
     student: Student = getStudent(creds)
 
     # Make marks request
-    data = student._session.get("https://schoolapps2.tvdsb.ca/students/portal_secondary/student_Info/stnt_transcript.asp")
+    data = student._session.get(
+        "https://schoolapps2.tvdsb.ca/students/portal_secondary/student_Info/stnt_transcript.asp"
+    )
 
     # Parse out every entry
-    raw_marks = re.findall(r"<tr valign='[a-z]*' bgcolor=['a-zA-Z0-9#]*><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><\/tr>", data.text, re.M)
+    raw_marks = re.findall(
+        r"<tr valign='[a-z]*' bgcolor=['a-zA-Z0-9#]*><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><\/tr>",
+        data.text,
+        re.M,
+    )
 
     # Clean up marking info
     marks = {}

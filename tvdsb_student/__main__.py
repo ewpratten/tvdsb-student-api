@@ -7,9 +7,11 @@ from typing import List
 import tvdsb_student
 
 if __name__ == "__main__":
-    
+
     # Create parser
-    ap = argparse.ArgumentParser(description="Dumps all TVDSB Student info to STDOUT as JSON")
+    ap = argparse.ArgumentParser(
+        description="Dumps all TVDSB Student info to STDOUT as JSON"
+    )
 
     # Auth
     ap.add_argument("--user", help="TVDSB account username", required=True)
@@ -22,7 +24,7 @@ if __name__ == "__main__":
     if not args.passwd:
         print("Student information is password protected")
         args.passwd = getpass.getpass("TVDSB Password: ")
-    
+
     # Log in
     creds = tvdsb_student.LoginCreds(args.user, args.passwd)
 
@@ -35,7 +37,7 @@ if __name__ == "__main__":
     output["attendance"] = attendance
 
     # # Read marking records
-    marks: dict = tvdsb_student.getMarkHistory(creds)
+    marks: List[dict] = tvdsb_student.getMarkHistory(creds)
     # print(marks)
     output["marks"] = marks
 

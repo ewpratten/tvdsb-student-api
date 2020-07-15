@@ -1,7 +1,10 @@
-import requests
 import re
 from typing import List
-from ..auth import Student, LoginCreds, getStudent
+
+import requests
+
+from ..auth import LoginCreds, Student, getStudent
+
 
 def getAttendanceRecords(creds: LoginCreds) -> List[dict]:
 
@@ -9,11 +12,16 @@ def getAttendanceRecords(creds: LoginCreds) -> List[dict]:
     student: Student = getStudent(creds)
 
     # Make attendance request
-    data = student._session.get("https://schoolapps2.tvdsb.ca/students/portal_secondary/student_Info/stnt_attendance.asp")
+    data = student._session.get(
+        "https://schoolapps2.tvdsb.ca/students/portal_secondary/student_Info/stnt_attendance.asp"
+    )
 
     # Parse out all record info
-    raw_records = re.findall(r"<td>([0-9]*\/[0-9]*\/[0-9]*)<\/td><td>([0-9]*)<\/td><td>([A-Z0-9-]*)<\/td><td>([A-Z]*)<\/td><td> ([^<]*)<\/td>", data.text)
-    
+    raw_records = re.findall(
+        r"<td>([0-9]*\/[0-9]*\/[0-9]*)<\/td><td>([0-9]*)<\/td><td>([A-Z0-9-]*)<\/td><td>([A-Z]*)<\/td><td> ([^<]*)<\/td>",
+        data.text,
+    )
+
     # Convert raw record data to AttendanceRecords
     records = []
     for record in raw_records:
