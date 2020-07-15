@@ -6,42 +6,75 @@ class InvalidAuth(Exception):
     pass
 
 # Auth information
-class AuthInfo:
-    first_name: str
-    has_school_today: bool
-    last_login_time: str
-    student_number: int
-    session: dict
+class Student:
+    """Student Information"""
+    _first_name: str = ""
+    _has_school_today: bool = False
+    _last_login_time: str = ""
+    _student_number: int = 0
+    _session: dict = {}
+
+    def getFirstName(self) -> str:
+        """Gets the student's first name
+
+        Returns:
+            str: First name
+        """
+        return self._first_name
+
+    def hasSchoolToday(self) -> bool:
+        """Get if the student has school today
+
+        Returns:
+            bool: has school today?
+        """
+        return self._has_school_today
+
+    def getLastLoginTime(self) -> str:
+        """Get the student's last login time
+
+        Returns:
+            str: Last login time
+        """
+        return self._last_login_time
+
+    def getStudentNumber(self) -> int:
+        """Get the student's student number
+
+        Returns:
+            int: Student number
+        """
+        return self._student_number
 
     def __str__(self):
         return str({
-            "first_name": self.first_name,
-            "has_school_today": self.has_school_today,
-            "last_login_time": self.last_login_time,
-            "student_number": self.student_number,
-            "session": self.session
+            "first_name": self.getFirstName(),
+            "has_school_today": self.hasSchoolToday(),
+            "last_login_time": self.getLastLoginTime(),
+            "student_number": self.getStudentNumber(),
+            "session": self._session
         })
 
-def _webpageToAuthInfo(data: str) -> AuthInfo:
+def _webpageToAuthInfo(data: str) -> Student:
     # Output
-    out = AuthInfo()
+    out = Student()
 
     # Pase Login info
     lgnInfo = re.findall(r'Good Morning, (.*)\.&nbsp;&nbsp;Today is .*, (.*).<br>\(Last Login Time (.*)\)', data, re.M)
     if len(lgnInfo) == 1:
-        out.first_name = lgnInfo[0][0]
-        out.has_school_today = lgnInfo[0][1] != "a day off of school"
-        out.last_login_time = lgnInfo[0][2]
+        out._first_name = lgnInfo[0][0]
+        out._has_school_today = lgnInfo[0][1] != "a day off of school"
+        out._last_login_time = lgnInfo[0][2]
 
     # Parse student auth info
     authInfo = re.findall(r"student_no=(.*)&code=(.*)&k=(.*)", data, re.M)
     if len(authInfo) == 1:
-        out.student_number = int(authInfo[0][0])
+        out._student_number = int(authInfo[0][0])
 
     return out
 
 # Login
-def getAuthInfo(username, password) -> str:
+def getStudent(username, password) -> Student:
     session = requests.Session()
 
     # Make primary request to read auth secrets embedded in the response
@@ -75,7 +108,7 @@ def getAuthInfo(username, password) -> str:
     studentInfo = _webpageToAuthInfo(data.text)
 
     # Get session data
-    studentInfo.session = session.cookies.get_dict()
+    studentInfo._session = session.cookies.get_dict()
 
     # Return auth info
     return studentInfo

@@ -2,7 +2,7 @@ import argparse
 import getpass
 import json
 
-from .auth import getAuthInfo, AuthInfo
+import tvdsb_student
 
 if __name__ == "__main__":
     
@@ -22,5 +22,10 @@ if __name__ == "__main__":
         args.passwd = getpass.getpass("TVDSB Password: ")
     
     # Log in
-    authInfo: AuthInfo = getAuthInfo(args.user, args.passwd)
-    print(authInfo)
+    student: tvdsb_student.Student = tvdsb_student.getStudent(args.user, args.passwd)
+    print(student)
+
+    # Read attendance records
+    attendance: tvdsb_student.AttendanceRecord = tvdsb_student.getAttendanceRecords(student)
+    for record in attendance:
+        print(record)
