@@ -25,10 +25,14 @@ if __name__ == "__main__":
     # Log in
     creds = tvdsb_student.LoginCreds(args.user, args.passwd)
 
-    # Read attendance records
-    attendance: List[dict] = tvdsb_student.getAttendanceRecords(creds)
-    print(attendance)
+    # # Read attendance records
+    # attendance: List[dict] = tvdsb_student.getAttendanceRecords(creds)
+    # print(attendance)
 
-    # Read marking records
-    marks: dict = tvdsb_student.getMarkHistory(creds)
-    print(marks)
+    # # Read marking records
+    # marks: dict = tvdsb_student.getMarkHistory(creds)
+    # print(marks)
+
+    # Read student payment info
+    payment: dict = tvdsb_student.getPaymentInfo(creds)
+    print(payment)

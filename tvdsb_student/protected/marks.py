@@ -8,7 +8,7 @@ def getMarkHistory(creds: LoginCreds) -> List[dict]:
     # Make auth to get student info
     student: Student = getStudent(creds)
 
-    # Make attendance request
+    # Make marks request
     data = student._session.get("https://schoolapps2.tvdsb.ca/students/portal_secondary/student_Info/stnt_transcript.asp")
 
     # Parse out every entry
