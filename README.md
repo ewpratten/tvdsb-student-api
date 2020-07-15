@@ -36,6 +36,9 @@ marks: List[dict] = tvdsb_student.getMarkHistory(creds)
 
 # Read student payment info
 payment: dict = tvdsb_student.getPaymentInfo(creds)
+
+# Read student timetable info
+timetable: dict = tvdsb_student.getTimetable(creds)
 ```
 
 ### Data schemas
