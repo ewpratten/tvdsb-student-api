@@ -5,6 +5,11 @@ import re
 class InvalidAuth(Exception):
     pass
 
+class LoginCreds:
+    def __init__(self, username:str, password: str):
+        self.username = username
+        self.password = password
+
 # Auth information
 class Student:
     """Student Information"""
@@ -12,7 +17,7 @@ class Student:
     _has_school_today: bool = False
     _last_login_time: str = ""
     _student_number: int = 0
-    _session: dict = {}
+    _session = None
 
     def getFirstName(self) -> str:
         """Gets the student's first name
@@ -51,8 +56,7 @@ class Student:
             "first_name": self.getFirstName(),
             "has_school_today": self.hasSchoolToday(),
             "last_login_time": self.getLastLoginTime(),
-            "student_number": self.getStudentNumber(),
-            "session": self._session
+            "student_number": self.getStudentNumber()
         })
 
 def _webpageToAuthInfo(data: str) -> Student:
@@ -74,7 +78,7 @@ def _webpageToAuthInfo(data: str) -> Student:
     return out
 
 # Login
-def getStudent(username, password) -> Student:
+def getStudent(creds: LoginCreds) -> Student:
     session = requests.Session()
 
     # Make primary request to read auth secrets embedded in the response
@@ -85,8 +89,8 @@ def getStudent(username, password) -> Student:
     
     # Build HTTP request
     request_body = {
-        "txtUserID": username,
-        "txtPwd": password,
+        "txtUserID": creds.username,
+        "txtPwd": creds.password,
         "__EVENTTARGET": "",
         "__EVENTARGUMENT": "",
         "btnSubmit":"Login"
@@ -108,7 +112,7 @@ def getStudent(username, password) -> Student:
     studentInfo = _webpageToAuthInfo(data.text)
 
     # Get session data
-    studentInfo._session = session.cookies.get_dict()
+    studentInfo._session = session
 
     # Return auth info
     return studentInfo

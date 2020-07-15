@@ -1,6 +1,7 @@
 import argparse
 import getpass
 import json
+from typing import List
 
 import tvdsb_student
 
@@ -22,10 +23,12 @@ if __name__ == "__main__":
         args.passwd = getpass.getpass("TVDSB Password: ")
     
     # Log in
-    student: tvdsb_student.Student = tvdsb_student.getStudent(args.user, args.passwd)
-    print(student)
+    creds = tvdsb_student.LoginCreds(args.user, args.passwd)
 
     # Read attendance records
-    attendance: tvdsb_student.AttendanceRecord = tvdsb_student.getAttendanceRecords(student)
-    for record in attendance:
-        print(record)
+    attendance: List[dict] = tvdsb_student.getAttendanceRecords(creds)
+    print(attendance)
+
+    # Read marking records
+    marks: dict = tvdsb_student.getMarkHistory(creds)
+    print(marks)
