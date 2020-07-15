@@ -1,6 +1,7 @@
 import argparse
 import getpass
 import json
+import pprint
 from typing import List
 
 import tvdsb_student
@@ -25,14 +26,22 @@ if __name__ == "__main__":
     # Log in
     creds = tvdsb_student.LoginCreds(args.user, args.passwd)
 
+    # Build output
+    output = {}
+
     # # Read attendance records
-    # attendance: List[dict] = tvdsb_student.getAttendanceRecords(creds)
+    attendance: List[dict] = tvdsb_student.getAttendanceRecords(creds)
     # print(attendance)
+    output["attendance"] = attendance
 
     # # Read marking records
-    # marks: dict = tvdsb_student.getMarkHistory(creds)
+    marks: dict = tvdsb_student.getMarkHistory(creds)
     # print(marks)
+    output["marks"] = marks
 
     # Read student payment info
     payment: dict = tvdsb_student.getPaymentInfo(creds)
-    print(payment)
+    # print(payment)
+    output["payment"] = payment
+
+    print(json.dumps(output, indent=1, sort_keys=True))
