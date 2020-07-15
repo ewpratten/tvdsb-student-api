@@ -4,3 +4,4 @@ from .auth import LoginCreds, Student, getStudent
 from .protected.attendance import getAttendanceRecords
 from .protected.marks import getMarkHistory
 from .protected.payment import getPaymentInfo
+from .protected.timetable import getTimetable

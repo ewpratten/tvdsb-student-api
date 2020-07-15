@@ -46,4 +46,9 @@ if __name__ == "__main__":
     # print(payment)
     output["payment"] = payment
 
+    # Read timetable info
+    timetable: dict = tvdsb_student.getTimetable(creds)
+    # pprint.pprint(timetable)
+    output["timetable"] = timetable
+
     print(json.dumps(output, indent=1, sort_keys=True))

@@ -9,7 +9,7 @@ project_config = {
         "name":"tvdsb-student-api", # Project name
         "description":"A Python library and CLI tool for interacting with the TVDSB Student Portal service ", # Project description
         "readme_file":"README.md", # Filepath for project README (blank for none)
-        "version":"1.1",
+        "version":"1.5",
         "license":"GPLv3",
         "url":"https://github.com/Ewpratten/tvdsb-student-api",
         "author":{

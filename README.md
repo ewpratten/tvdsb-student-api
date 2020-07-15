@@ -82,3 +82,27 @@ These are all examples of the datastructures generated from polling my student a
     "pin": 1234567890 // PIN number used to link a parent's payment account to a student (not my real pin)
 }
 ```
+
+#### Timetable
+```js
+{
+    "student_info": {
+        'grade': 12,                            // Current grade, or next grade during summer
+        'locker_number': null,                  // Locker number or null/None for no locker
+        'name': ['Evan', 'Pratten'],            // First and last name
+        'ontario_education_number': 123456789,  // OEN (not my real OEN)
+        'student_number': 987654321             // TVDSB student number (not my real student number)
+    },
+    "course_semesters": [ // Contains a sub-array for each semester
+        [ // Contains an object for each course
+            {
+                'course_code': 'ENG4U1-02', // Course code
+                'period': 2,                // Period number
+                'start_time': 1000,         // Time the period begins (24hr)
+                'end_time': 1115            // Time the period ends (24hr)
+                
+            }
+        ]
+    ]
+}
+```
