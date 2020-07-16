@@ -9,7 +9,7 @@ project_config = {
         "name":"tvdsb-student-api", # Project name
         "description":"A Python library and CLI tool for interacting with the TVDSB Student Portal service ", # Project description
         "readme_file":"README.md", # Filepath for project README (blank for none)
-        "version":"1.5",
+        "version":"1.6",
         "license":"GPLv3",
         "url":"https://github.com/Ewpratten/tvdsb-student-api",
         "author":{
@@ -80,7 +80,7 @@ class MetaInstall:
     
     # Setup requirements
     self_requires:list = [RequiredModule("mypy", True), RequiredModule("pylint", True), 
-                          RequiredModule("pytest", True), RequiredModule("pytest-cov", True, "coverage"), 
+                        #   RequiredModule("pytest", True), RequiredModule("pytest-cov", True, "coverage"), 
                           RequiredModule("cython", True), RequiredModule("black", True), 
                           RequiredModule("isort", True), RequiredModule("bandit", True)]
     
