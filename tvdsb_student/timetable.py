@@ -3,7 +3,7 @@ from typing import List
 
 import requests
 
-from ..auth import LoginCreds, Student, getStudent
+from .auth import LoginCreds, Student, getStudent
 
 
 def getTimetable(creds: LoginCreds) -> List[dict]:
